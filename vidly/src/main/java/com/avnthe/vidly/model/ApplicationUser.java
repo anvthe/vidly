@@ -27,7 +27,7 @@ public class ApplicationUser implements UserDetails {
 
     private Set<Role> authorities;
 
-    public ApplicationUser() {
+    public ApplicationUser(int userId, String admin, String password, Set<org.springframework.context.annotation.Role> roles) {
         super();
         authorities = new HashSet<Role>();
     }

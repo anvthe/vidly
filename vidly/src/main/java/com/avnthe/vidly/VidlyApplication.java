@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Role;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,17 +21,18 @@ public class VidlyApplication {
 	}
 
 	@Bean
-	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository){
+	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncode){
 		return args -> {
+
 			if(roleRepository.findByAuthority("ADMIN").isPresent()) return;;
 
-			Role adminRole = roleRepository.save(new Role(authority:"ADMIN"));
-			roleRepository.save(new Role(authority:"USER"));
+			Role adminRole = roleRepository.save( new Role("ADMIN"));
+			roleRepository.save(new Role("USER"));
 
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
 
-			ApplicationUser admin = new ApplicationUser(1, "admin", passwordEncoder.encode("password"), roles);
+			ApplicationUser admin = new ApplicationUser(1, "admin", passwordEncode.encode("password"), roles);
 			userRepository.save(admin);
 		};
 	}
